@@ -245,7 +245,7 @@
       e.preventDefault();
       const payload = Object.fromEntries(new FormData(form).entries());
       try {
-        const res = await fetch('https://script.google.com/macros/s/AKfycbxZ2uMhSBXI2v2YpxhQAIofYeWUZLyyFNcc_wPXGVQEB2VYBJs8ljqL9I-0UWgXZEBdpw/exec', {
+        const res = await fetch('https://script.google.com/macros/s/AKfycbzWYwVo14gc2-PamdXFnExQI42D4hFgZZZ7gRp8yAnrPLi6SFpyDye42TG5C0AYil-iAw/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
