@@ -28,8 +28,24 @@
     ul{padding-left:20px;text-align:left;display:inline-block}
     .price{font-size:3rem;font-weight:900;color:var(--green)}
     .final{padding:48px 24px 80px;text-align:center}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.68);display:none;align-items:center;justify-content:center;padding:24px;z-index:9999}
+    .modal-backdrop.active{display:flex}
+    .modal{width:min(760px,100%);background:linear-gradient(180deg,#10192c,#111827);border:1px solid #2b3c55;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.45);padding:28px;position:relative}
+    .modal h2{margin:0 0 8px;color:var(--cyan);text-align:center}
+    .modal p.helper{margin:0 0 22px;color:var(--muted);text-align:center}
+    .close-btn{position:absolute;top:14px;right:14px;background:#182338;color:#fff;border:1px solid #2b3c55;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:18px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .field{display:flex;flex-direction:column;gap:8px}
+    .field.full{grid-column:1 / -1}
+    .field label{font-weight:700;color:#d9e3f0;font-size:.95rem}
+    .field input,.field select,.field textarea{width:100%;padding:14px 14px;border-radius:14px;border:1px solid #31425b;background:#0d1424;color:#f5f7fb;font:inherit}
+    .field textarea{min-height:120px;resize:vertical}
+    .form-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+    .thankyou{display:none;text-align:center;padding:20px 10px 8px}
+    .thankyou.active{display:block}
+    .form-wrap.hidden{display:none}
     @media (max-width: 900px){
-      .grid-3,.grid-2{grid-template-columns:1fr}
+      .grid-3,.grid-2,.form-grid{grid-template-columns:1fr}
       .card{min-height:auto}
     }
   </style>
@@ -42,7 +58,7 @@
       <p class="sub">If you know AI matters but you still haven’t implemented anything useful, this sprint helps you identify the best first workflow, set it up, and get it working without drowning in tools, prompts, or confusion.</p>
       <div class="cta-row">
         <a class="btn primary" href="https://buy.stripe.com/3cIaEZ2pA9Uy3yubOw7AI01">Book Your AI Setup Sprint</a>
-        <a class="btn secondary" href="mailto:gaspella@agentmail.to?subject=AI%20Setup%20Sprint%20Application">Apply / Ask a Question First</a>
+        <a class="btn secondary" href="#apply" data-open-apply>Apply / Ask a Question First</a>
       </div>
     </section>
 
@@ -145,7 +161,7 @@
         <p class="muted">A practical implementation sprint for local businesses ready to stop dabbling and start using AI.</p>
         <div class="cta-row">
           <a class="btn primary" href="https://buy.stripe.com/3cIaEZ2pA9Uy3yubOw7AI01">Book Your AI Setup Sprint</a>
-          <a class="btn secondary" href="mailto:gaspella@agentmail.to?subject=AI%20Setup%20Sprint%20Application">Apply / Ask a Question First</a>
+          <a class="btn secondary" href="#apply" data-open-apply>Apply / Ask a Question First</a>
         </div>
       </div>
     </section>
@@ -167,9 +183,69 @@
       <p class="sub">You need one real system that works.</p>
       <div class="cta-row">
         <a class="btn primary" href="https://buy.stripe.com/3cIaEZ2pA9Uy3yubOw7AI01">Book Your AI Setup Sprint</a>
-        <a class="btn secondary" href="mailto:gaspella@agentmail.to?subject=AI%20Setup%20Sprint%20Application">Apply / Ask a Question First</a>
+        <a class="btn secondary" href="#apply" data-open-apply>Apply / Ask a Question First</a>
       </div>
     </section>
   </div>
+
+
+  <div class="modal-backdrop" id="applyModal">
+    <div class="modal">
+      <button class="close-btn" type="button" id="closeApplyModal">×</button>
+      <div class="form-wrap" id="applyFormWrap">
+        <h2>Apply / Ask a Question First</h2>
+        <p class="helper">Fill this out and we’ll review your inquiry. Later we’ll wire this directly into email + Google Sheets capture.</p>
+        <form id="applyForm">
+          <div class="form-grid">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" required /></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div>
+            <div class="field"><label for="business">Business Name</label><input id="business" name="business" /></div>
+            <div class="field"><label for="website">Website</label><input id="website" name="website" placeholder="https://" /></div>
+            <div class="field"><label for="type">Business Type</label><input id="type" name="type" placeholder="Agency, coach, realtor, local service..." /></div>
+            <div class="field"><label for="bottleneck">Biggest Bottleneck</label><input id="bottleneck" name="bottleneck" placeholder="Lead follow-up, admin, content, onboarding..." /></div>
+            <div class="field"><label for="revenue">Monthly Revenue Range</label>
+              <select id="revenue" name="revenue"><option value="">Select one</option><option>Under $5k</option><option>$5k–$15k</option><option>$15k–$50k</option><option>$50k+</option></select>
+            </div>
+            <div class="field"><label for="timeline">Timeline / Urgency</label>
+              <select id="timeline" name="timeline"><option value="">Select one</option><option>ASAP</option><option>This month</option><option>Next 30–60 days</option><option>Just exploring</option></select>
+            </div>
+            <div class="field full"><label for="budget">Budget Comfort</label>
+              <select id="budget" name="budget"><option value="">Select one</option><option>$500–$1,500</option><option>$1,500–$3,000</option><option>$3,000+</option><option>Not sure yet</option></select>
+            </div>
+            <div class="field full"><label for="questions">What questions do you have?</label><textarea id="questions" name="questions"></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">Submit Inquiry</button>
+            <button class="btn secondary" type="button" id="cancelApplyModal">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <div class="thankyou" id="applyThankYou">
+        <h2>Thank you for your inquiry.</h2>
+        <p class="helper">We will review it and follow up with you soon.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    const applyModal = document.getElementById('applyModal');
+    const openBtns = document.querySelectorAll('[data-open-apply]');
+    const closeBtn = document.getElementById('closeApplyModal');
+    const cancelBtn = document.getElementById('cancelApplyModal');
+    const form = document.getElementById('applyForm');
+    const thankYou = document.getElementById('applyThankYou');
+    const formWrap = document.getElementById('applyFormWrap');
+    function openModal(){ applyModal.classList.add('active'); document.body.style.overflow='hidden'; }
+    function closeModal(){ applyModal.classList.remove('active'); document.body.style.overflow=''; }
+    openBtns.forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); openModal(); }));
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    applyModal.addEventListener('click', e => { if(e.target === applyModal) closeModal(); });
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      formWrap.classList.add('hidden');
+      thankYou.classList.add('active');
+    });
+  </script>
+
 </body>
 </html>
