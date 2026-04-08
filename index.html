@@ -217,7 +217,6 @@
           </div>
           <div class="form-actions">
             <button class="btn primary" type="submit">Submit Inquiry</button>
-            <button class="btn secondary" type="button" id="cancelApplyModal">Exit</button>
           </div>
         </form>
       </div>
@@ -231,7 +230,6 @@
     const applyModal = document.getElementById('applyModal');
     const openBtns = document.querySelectorAll('[data-open-apply]');
     const closeBtn = document.getElementById('closeApplyModal');
-    const cancelBtn = document.getElementById('cancelApplyModal');
     const form = document.getElementById('applyForm');
     const thankYou = document.getElementById('applyThankYou');
     const formWrap = document.getElementById('applyFormWrap');
@@ -239,7 +237,6 @@
     function closeModal(){ applyModal.classList.remove('active'); document.body.style.overflow=''; }
     openBtns.forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); openModal(); }));
     closeBtn.addEventListener('click', closeModal);
-    cancelBtn.addEventListener('click', closeModal);
     applyModal.addEventListener('click', e => { if(e.target === applyModal) closeModal(); });
     form.addEventListener('submit', async e => {
       e.preventDefault();
