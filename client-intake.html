@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Setup Sprint — Client Intake</title>
+  <style>
+    :root{--bg:#0a0f1e;--bg2:#141414;--text:#f5f7fb;--muted:#aab4c5;--cyan:#00d9ff;--green:#10b981;--yellow:#fbbf24;--card:#111827;--line:#36d7ff;}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#111827 45%,var(--bg2));color:var(--text);line-height:1.6}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    .hero{padding:56px 24px 28px;text-align:center}
+    .eyebrow{color:var(--cyan);font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+    h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.05;margin:16px auto;max-width:880px}
+    .hl{color:var(--yellow)} .sub{max-width:780px;margin:0 auto 18px;color:var(--muted);font-size:1.05rem}
+    .card{background:rgba(17,24,39,.84);border:1px solid #233047;border-radius:24px;padding:24px;box-shadow:0 14px 50px rgba(0,0,0,.24)}
+    .segment-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 18px}
+    .seg-dot{height:6px;width:72px;border-radius:999px;background:#1f3147;overflow:hidden;position:relative}
+    .seg-dot.active,.seg-dot.done{background:#14384a}
+    .seg-dot.active::after,.seg-dot.done::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--line),#8cecff)}
+    .segment{display:none}.segment.active{display:block}
+    .segment h2{margin:0 0 8px;color:var(--cyan);text-align:center}.helper{text-align:center;color:var(--muted);margin:0 0 20px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.full{grid-column:1/-1}
+    label{font-weight:700;color:#dbe6f5}.input, select, textarea{width:100%;padding:13px 14px;border-radius:14px;border:1px solid #31425b;background:#0d1424;color:#f5f7fb;font:inherit}
+    textarea{min-height:96px;resize:vertical}.actions{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:20px}
+    .btn{padding:14px 22px;border-radius:14px;font-weight:800;text-decoration:none;display:inline-block;border:0;cursor:pointer}
+    .btn.primary{background:var(--yellow);color:#111}.btn.secondary{background:transparent;color:var(--text);border:1px solid #30425d}
+    .btn:disabled{opacity:.5;cursor:not-allowed}.note{margin-top:12px;color:var(--muted);font-size:.95rem;text-align:center}
+    .status{margin-top:16px;text-align:center}.success{color:#86efac}.error{color:#fca5a5}
+    @media (max-width: 860px){.form-grid{grid-template-columns:1fr}.actions{justify-content:center}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">AI SETUP SPRINT — CLIENT INTAKE</div>
+      <h1>Let’s Clarify <span class="hl">What We Build First</span></h1>
+      <p class="sub">Complete this intake so we can diagnose the business clearly before the first consultation and define the smartest first build / MVP direction.</p>
+    </section>
+
+    <section class="card">
+      <div class="segment-nav" id="segmentNav"></div>
+      <form id="intakeForm">
+        <input type="hidden" name="formType" value="client-intake" />
+        <input type="hidden" name="sourcePage" value="client-intake.html" />
+
+        <div class="segment active" data-step="0">
+          <h2>1. Client Basics</h2>
+          <p class="helper">Start with the core business and contact details.</p>
+          <div class="form-grid">
+            <div class="field"><label>Client name</label><input class="input" name="clientName" required /></div>
+            <div class="field"><label>Business name</label><input class="input" name="businessName" required /></div>
+            <div class="field"><label>Industry / niche</label><input class="input" name="industryNiche" /></div>
+            <div class="field"><label>Website</label><input class="input" name="website" placeholder="https://" /></div>
+            <div class="field"><label>Main contact email</label><input class="input" name="mainContactEmail" type="email" required /></div>
+            <div class="field"><label>Best communication channel</label><input class="input" name="bestCommunicationChannel" placeholder="Email, WhatsApp, phone, Zoom..." /></div>
+          </div>
+        </div>
+
+        <div class="segment" data-step="1">
+          <h2>2. Business Model</h2>
+          <p class="helper">Help us understand what the business sells and how it grows.</p>
+          <div class="form-grid">
+            <div class="field full"><label>What do you sell?</label><textarea name="whatDoYouSell"></textarea></div>
+            <div class="field full"><label>Who do you sell to?</label><textarea name="whoDoYouSellTo"></textarea></div>
+            <div class="field full"><label>How do you currently get leads?</label><textarea name="howDoYouGetLeads"></textarea></div>
+            <div class="field full"><label>What is your main offer right now?</label><textarea name="mainOffer"></textarea></div>
+            <div class="field full"><label>What result do clients/customers want most from you?</label><textarea name="desiredCustomerResult"></textarea></div>
+          </div>
+        </div>
+
+        <div class="segment" data-step="2">
+          <h2>3. Current Software Stack</h2>
+          <p class="helper">List the tools already in play so we work with reality, not assumptions.</p>
+          <div class="form-grid">
+            <div class="field full"><label>List the tools currently used (general)</label><textarea name="toolsGeneral"></textarea></div>
+            <div class="field"><label>CRM</label><input class="input" name="crm" /></div>
+            <div class="field"><label>Email platform</label><input class="input" name="emailPlatform" /></div>
+            <div class="field"><label>Scheduling</label><input class="input" name="scheduling" /></div>
+            <div class="field"><label>Payment platform</label><input class="input" name="paymentPlatform" /></div>
+            <div class="field"><label>Website / CMS</label><input class="input" name="websiteCms" /></div>
+            <div class="field"><label>Social scheduling</label><input class="input" name="socialScheduling" /></div>
+            <div class="field"><label>Internal task/project tools</label><input class="input" name="internalTaskTools" /></div>
+            <div class="field full"><label>Other tools</label><textarea name="otherTools"></textarea></div>
+          </div>
+        </div>
+
+        <div class="segment" data-step="3">
+          <h2>4. Bottlenecks + Friction</h2>
+          <p class="helper">Show us where things are slowing down, getting messy, or falling through the cracks.</p>
+          <div class="form-grid">
+            <div class="field"><label>Top bottleneck #1</label><input class="input" name="bottleneck1" /></div>
+            <div class="field"><label>Top bottleneck #2</label><input class="input" name="bottleneck2" /></div>
+            <div class="field full"><label>Top bottleneck #3</label><input class="input" name="bottleneck3" /></div>
+            <div class="field full"><label>What tasks are repeated every day or every week?</label><textarea name="repetitiveTasks"></textarea></div>
+            <div class="field full"><label>What takes too much time?</label><textarea name="tooMuchTime"></textarea></div>
+            <div class="field full"><label>What gets forgotten, delayed, or dropped?</label><textarea name="forgottenDelayedDropped"></textarea></div>
+            <div class="field full"><label>Where are leads getting stuck?</label><textarea name="leadFriction"></textarea></div>
+            <div class="field full"><label>Where is fulfillment getting slow?</label><textarea name="fulfillmentSlow"></textarea></div>
+            <div class="field full"><label>Where is communication breaking down?</label><textarea name="communicationBreakdown"></textarea></div>
+          </div>
+        </div>
+
+        <div class="segment" data-step="4">
+          <h2>5. Desired Outcome</h2>
+          <p class="helper">This helps us define what a real win looks like.</p>
+          <div class="form-grid">
+            <div class="field full"><label>What do you want fixed first?</label><textarea name="fixFirst"></textarea></div>
+            <div class="field full"><label>If we only solved one problem in the first phase, what should it be?</label><textarea name="oneProblemFirstPhase"></textarea></div>
+            <div class="field full"><label>What result would make this project feel like a win in 30 days?</label><textarea name="win30Days"></textarea></div>
+            <div class="field full"><label>What would make it feel like a win in 90 days?</label><textarea name="win90Days"></textarea></div>
+          </div>
+        </div>
+
+        <div class="segment" data-step="5">
+          <h2>6. Capacity + Constraints</h2>
+          <p class="helper">We want the first build to match the team’s reality and constraints.</p>
+          <div class="form-grid">
+            <div class="field"><label>Do you have a team?</label><input class="input" name="hasTeam" /></div>
+            <div class="field"><label>Who would use this system daily?</label><input class="input" name="dailyUsers" /></div>
+            <div class="field"><label>Who approves content / actions / workflows?</label><input class="input" name="approver" /></div>
+            <div class="field"><label>How much change can your team realistically handle right now?</label><input class="input" name="changeCapacity" /></div>
+            <div class="field"><label>Are you comfortable using new tools?</label><input class="input" name="toolComfort" /></div>
+            <div class="field"><label>Do you want high automation or light automation?</label><input class="input" name="automationLevel" /></div>
+            <div class="field"><label>Do you prefer manual approvals before actions happen?</label><input class="input" name="manualApprovals" /></div>
+            <div class="field"><label>Are there tools or systems you do not want touched right now?</label><input class="input" name="doNotTouchTools" /></div>
+            <div class="field"><label>Any compliance/privacy concerns?</label><input class="input" name="complianceConcerns" /></div>
+            <div class="field"><label>Any tools that are mandatory?</label><input class="input" name="mandatoryTools" /></div>
+            <div class="field"><label>Any tools that are off-limits?</label><input class="input" name="offLimitsTools" /></div>
+            <div class="field"><label>Any deadlines or launch dates?</label><input class="input" name="deadlines" /></div>
+            <div class="field full"><label>Budget comfort level</label><input class="input" name="budgetComfortLevel" /></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn secondary" id="backBtn">← Back</button>
+          <button type="button" class="btn primary" id="nextBtn">Next →</button>
+          <button type="submit" class="btn primary" id="submitBtn" style="display:none;">Submit Intake</button>
+        </div>
+        <p class="note">Your answers will help us diagnose the business clearly before the first consultation and determine what we build first.</p>
+        <div class="status" id="status"></div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec';
+    const segments = [...document.querySelectorAll('.segment')];
+    const nav = document.getElementById('segmentNav');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('intakeForm');
+    const statusEl = document.getElementById('status');
+    let step = 0;
+
+    function buildNav(){
+      nav.innerHTML = '';
+      segments.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'seg-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+        nav.appendChild(dot);
+      });
+    }
+    function showStep(){
+      segments.forEach((el,i)=>el.classList.toggle('active', i===step));
+      backBtn.style.visibility = step === 0 ? 'hidden' : 'visible';
+      nextBtn.style.display = step === segments.length - 1 ? 'none' : 'inline-block';
+      submitBtn.style.display = step === segments.length - 1 ? 'inline-block' : 'none';
+      buildNav();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function validateStep(){
+      const current = segments[step];
+      const required = [...current.querySelectorAll('[required]')];
+      for (const field of required){ if (!field.value.trim()) { field.focus(); return false; } }
+      return true;
+    }
+    nextBtn.addEventListener('click', ()=>{ if (!validateStep()) return; step += 1; showStep(); });
+    backBtn.addEventListener('click', ()=>{ if (step > 0) { step -= 1; showStep(); } });
+    showStep();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateStep()) return;
+      statusEl.innerHTML = '<span class="muted">Submitting intake...</span>';
+      submitBtn.disabled = true;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      payload.submittedAt = new Date().toISOString();
+      payload.entrySource = 'AI Setup Sprint Client Intake Page';
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Submit failed');
+        form.reset();
+        step = 0; showStep();
+        statusEl.innerHTML = '<span class="success">Thank you — your intake was submitted successfully. We will review it and follow up with next steps.</span>';
+      } catch (err) {
+        statusEl.innerHTML = '<span class="error">There was a problem submitting your intake. Please try again.</span>';
+      } finally { submitBtn.disabled = false; }
+    });
+  </script>
+</body>
+</html>
