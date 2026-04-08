@@ -11,11 +11,11 @@ module.exports = async (req, res) => {
     }
 
     const obj = event.data && event.data.object ? event.data.object : {};
-    const paymentLink = obj.payment_link || '';
-    const allowedPaymentLink = process.env.AI_SETUP_PAYMENT_LINK_ID || 'plink_1TJgqiPbIAnZauummLwnnXIn';
+    const paymentLink = String(obj.payment_link || '').trim();
+    const allowedPaymentLink = String(process.env.AI_SETUP_PAYMENT_LINK_ID || 'plink_1TJgqiPbIAnZauummLwnnXIn').trim();
 
     if (paymentLink !== allowedPaymentLink) {
-      return res.status(200).json({ ok: true, ignored: true, reason: 'wrong_payment_link', paymentLink });
+      return res.status(200).json({ ok: true, ignored: true, reason: 'wrong_payment_link', paymentLink, allowedPaymentLink });
     }
 
     const email = obj.customer_details && obj.customer_details.email ? obj.customer_details.email : obj.customer_email;
