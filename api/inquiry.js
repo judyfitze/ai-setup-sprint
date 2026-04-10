@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -58,4 +58,4 @@ export default async function handler(req, res) {
       error: error.message 
     });
   }
-}// Redeploy trigger Fri Apr 10 22:14:49 UTC 2026
+};
