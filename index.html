@@ -242,15 +242,32 @@
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form).entries());
       
+      // Prepare Global Control payload
+      const nameParts = (formData.name || '').split(' ');
+      const gcPayload = {
+        email: formData.email,
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        phone: formData.phone || ''
+      };
+      
       try {
-        // Submit to our API route which handles Global Control
-        const res = await fetch('/api/inquiry', {
+        // Fire Global Control tag via CORS proxy
+        const gcRes = await fetch('https://corsproxy.io/?https://api.globalcontrol.io/api/ai/tags/fire-tag/69d7c5cad97ab99f0362ee92', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          headers: {
+            'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(gcPayload)
         });
         
-        if (!res.ok) throw new Error('Submit failed');
+        // Save to Google Sheet (non-blocking)
+        fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(formData)
+        }).catch(() => {});
         
         formWrap.classList.add('hidden');
         thankYou.classList.add('active');
