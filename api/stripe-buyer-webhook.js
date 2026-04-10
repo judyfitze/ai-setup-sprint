@@ -13,8 +13,11 @@ module.exports = async (req, res) => {
   try {
     const event = req.body || {};
     
+    addLog({ stage: 'received_body', formType: event.formType, hasEmail: !!event.email, bodyKeys: Object.keys(event) });
+    
     // Handle inquiry form submissions (non-Stripe)
     if (event.formType === 'inquiry') {
+      addLog({ stage: 'processing_inquiry', email: event.email });
       const nameParts = String(event.name || '').trim().split(/\s+/).filter(Boolean);
       const firstName = nameParts.length ? nameParts[0] : '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
