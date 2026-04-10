@@ -1,0 +1,8 @@
+{
+  "name": "ai-setup-sprint",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo 'No tests'"
+  },
+  "dependencies": {}
+}
