@@ -251,21 +251,12 @@
       };
       
       try {
-        // Fire Global Control tag via API
-        const gcRes = await fetch('/api/inquiry', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(gcPayload)
-        });
-        
-        // Save to Google Sheet (non-blocking)
-        fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
+        // Submit to Apps Script (now with Global Control working)
+        const gcRes = await fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(formData)
-        }).catch(() => {});
+        });
         
         formWrap.classList.add('hidden');
         thankYou.classList.add('active');
