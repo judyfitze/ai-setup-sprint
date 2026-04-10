@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Handler</title>
+</head>
+<body>
+  <h1>Submitting...</h1>
+  <script>
+    // Get form data from URL params
+    const params = new URLSearchParams(window.location.search);
+    const formData = {
+      name: params.get('name') || '',
+      email: params.get('email') || '',
+      phone: params.get('phone') || ''
+    };
+    
+    // Prepare Global Control payload
+    const nameParts = formData.name.split(' ');
+    const gcPayload = {
+      email: formData.email,
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || '',
+      phone: formData.phone
+    };
+    
+    // Submit to Global Control
+    fetch('https://api.globalcontrol.io/api/ai/tags/fire-tag/69d7c5cad97ab99f0362ee92', {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(gcPayload)
+    }).then(() => {
+      window.location.href = '/success.html';
+    }).catch(() => {
+      window.location.href = '/success.html';
+    });
+  </script>
+</body>
+</html>
