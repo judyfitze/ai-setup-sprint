@@ -240,17 +240,39 @@
     applyModal.addEventListener('click', e => { if(e.target === applyModal) closeModal(); });
     form.addEventListener('submit', async e => {
       e.preventDefault();
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const formData = Object.fromEntries(new FormData(form).entries());
+      
+      // Prepare Global Control payload
+      const nameParts = (formData.name || '').split(' ');
+      const gcPayload = {
+        email: formData.email,
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        phone: formData.phone || ''
+      };
+      
       try {
-        const res = await fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
+        // Fire Global Control tag directly
+        const gcRes = await fetch('https://api.globalcontrol.io/api/ai/tags/fire-tag/69d7c5cad97ab99f0362ee92', {
+          method: 'POST',
+          headers: {
+            'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(gcPayload)
+        });
+        
+        // Also save to Google Sheet via Apps Script (for backup/logging)
+        fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error('Submit failed');
+          body: JSON.stringify(formData)
+        }).catch(err => console.log('Sheet backup failed (non-critical):', err));
+        
         formWrap.classList.add('hidden');
         thankYou.classList.add('active');
       } catch (err) {
+        console.error('Submission error:', err);
         alert('There was a problem submitting your inquiry. Please try again.');
       }
     });
