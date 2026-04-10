@@ -251,8 +251,8 @@
       };
       
       try {
-        // Fire Global Control tag via working webhook endpoint
-        const gcRes = await fetch('/api/stripe-buyer-webhook', {
+        // Fire Global Control tag via API
+        const gcRes = await fetch('/api/inquiry', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
