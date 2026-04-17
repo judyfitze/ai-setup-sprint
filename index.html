@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Setup Sprint for Local Businesses — Sample 2</title>
+  <!-- v: sample2-8cf7d1f -->
   <style>
     :root{--bg:#0a0f1e;--bg2:#141414;--text:#f5f7fb;--muted:#aab4c5;--cyan:#00d9ff;--green:#10b981;--yellow:#fbbf24;--card:#111827;}
     *{box-sizing:border-box}
@@ -241,32 +242,31 @@
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(form).entries());
-      
-      // Prepare payload for webhook
-      const gcPayload = {
-        formType: 'inquiry',
-        email: formData.email,
-        name: formData.name || '',
-        phone: formData.phone || ''
-      };
+      const nameParts = String(formData.name || '').trim().split(/\s+/).filter(Boolean);
+      const firstName = nameParts.length ? nameParts[0] : '';
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
       
       try {
-        // Submit to API endpoint (handles email notification + Global Control)
-        const gcRes = await fetch('/api/inquiry', {
+        // Fire Global Control tag directly (triggers email sequence + stores contact)
+        await fetch('https://api.globalcontrol.io/api/ai/tags/fire-tag/69d7c5cad97ab99f0362ee92', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          headers: {
+            'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            firstName: firstName,
+            lastName: lastName,
+            phone: formData.phone || ''
+          })
         });
         
-        // Always show success if we get any response (backend handles email + GC)
         formWrap.classList.add('hidden');
         thankYou.classList.add('active');
       } catch (err) {
-        // Even on error, backend likely processed it (CORS preflight, etc.)
-        // Check if we should still show success
-        console.log('Fetch completed (possible CORS warning):', err);
-        formWrap.classList.add('hidden');
-        thankYou.classList.add('active');
+        console.error('Error:', err);
+        alert('There was a problem submitting your inquiry. Please try again.');
       }
     });
   </script>
