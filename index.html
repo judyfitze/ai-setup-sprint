@@ -247,20 +247,21 @@
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
       
       try {
-        // Fire Global Control tag directly (triggers email sequence + stores contact)
-        await fetch('https://api.globalcontrol.io/api/ai/tags/fire-tag/69d7c5cad97ab99f0362ee92', {
+        // Submit to API endpoint (handles GC tag + email notification)
+        const res = await fetch('/api/inquiry', {
           method: 'POST',
           headers: {
-            'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            email: formData.email,
-            firstName: firstName,
-            lastName: lastName,
-            phone: formData.phone || ''
+            ...formData,
+            formType: 'inquiry'
           })
         });
+        
+        if (!res.ok) {
+          throw new Error('API error');
+        }
         
         formWrap.classList.add('hidden');
         thankYou.classList.add('active');
