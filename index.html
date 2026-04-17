@@ -247,20 +247,19 @@
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
       
       try {
-        // Submit to API endpoint (handles GC tag + email notification)
-        const res = await fetch('/api/inquiry', {
+        // Submit to Google Apps Script (handles GC tag + Gmail + Sheet)
+        const res = await fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/plain;charset=utf-8'
           },
-          body: JSON.stringify({
-            ...formData,
-            formType: 'inquiry'
-          })
+          body: JSON.stringify(formData)
         });
         
-        if (!res.ok) {
-          throw new Error('API error');
+        const result = await res.json();
+        
+        if (!result.ok) {
+          throw new Error(result.error || 'Submission failed');
         }
         
         formWrap.classList.add('hidden');
