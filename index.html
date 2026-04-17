@@ -251,10 +251,10 @@
       };
       
       try {
-        // Submit to Apps Script (now with Global Control working)
-        const gcRes = await fetch('https://script.google.com/macros/s/AKfycby8pFKi_fD1qozOgK6nlTeYcjpqab7wOfS2bh7a1bxTc--3gcYYo1ftgy0q2AaRND36fA/exec', {
+        // Submit to API endpoint (handles email notification + Global Control)
+        const gcRes = await fetch('/api/inquiry', {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
         

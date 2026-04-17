@@ -7,11 +7,67 @@ module.exports = async (req, res) => {
     const event = req.body || {};
     
     // Handle inquiry form
-    if (event.formType === 'inquiry') {
+    if (event.formType === 'inquiry' || event.name) {
       const nameParts = String(event.name || '').trim().split(/\s+/).filter(Boolean);
       const firstName = nameParts.length ? nameParts[0] : '';
       const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
       
+      // Build email notification body with all form fields
+      const emailSubject = `AI Setup Sprint Inquiry: ${event.name || 'New Prospect'}`;
+      const emailBody = `
+New AI Setup Sprint Inquiry
+
+CONTACT INFO
+------------
+Name: ${event.name || 'N/A'}
+Email: ${event.email || 'N/A'}
+Phone: ${event.phone || 'N/A'}
+
+BUSINESS INFO
+-------------
+Business Name: ${event.business || 'N/A'}
+Website: ${event.website || 'N/A'}
+Business Type: ${event.type || 'N/A'}
+
+QUALIFICATION
+-------------
+Biggest Bottleneck: ${event.bottleneck || 'N/A'}
+Monthly Revenue: ${event.revenue || 'N/A'}
+Timeline: ${event.timeline || 'N/A'}
+Budget Comfort: ${event.budget || 'N/A'}
+
+QUESTIONS
+---------
+${event.questions || 'None'}
+
+---
+Submitted: ${new Date().toISOString()}
+`;
+
+      // Send email notification via Global Control SMTP or external service
+      // Using a simple SMTP relay approach - you'll need to configure this
+      const emailPayload = {
+        to: 'getsmartyclaw@gmail.com',
+        subject: emailSubject,
+        text: emailBody,
+        from: 'inquiries@ai-setup-sprint.vercel.app'
+      };
+
+      // Try to send email (non-blocking - don't fail if email errors)
+      try {
+        await fetch('https://api.globalcontrol.io/api/ai/send-email', {
+          method: 'POST',
+          headers: {
+            'X-API-KEY': '21c6ddbd3338d2e75cffd56f6b6c3ed6bf419e870393e0a0bd02c985565d39ab',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(emailPayload)
+        });
+      } catch (emailErr) {
+        console.log('Email notification failed (non-critical):', emailErr.message);
+      }
+      
+      // Fire Global Control tag
       const gcPayload = {
         email: event.email,
         firstName: firstName,
